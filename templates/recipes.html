@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Tallennetut ostoslistat{% endblock %}
+{% block content %}
+Ostoslistoja tietokannassa: {{ count }}
+<hr>
+{% for recipe in recipes %}
+<a href="/showrecipe/{{recipe[0]}}">{{recipe[1]}}</a>
+<hr>
+{% endfor %}
+{% endblock %}

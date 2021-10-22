@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %}Ruoka-aineet tietokannassa{% endblock %}
+{% block content %}
+Ruoka-aineita tietokannassa: {{ count }}
+<hr>
+{% for ingredient in ingredients %}
+{{ ingredient[0] }}
+<hr>
+{% endfor %}
+<a href="/newingredient">Lisää ruoka-aine</a>
+{% endblock %}

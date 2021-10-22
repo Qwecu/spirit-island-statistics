@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Uusi ainesosa{% endblock %}
+{% block content %}
+
+<table>
+    <tr>
+        <th>Spirit id</th>
+        <th>Spirit name</th>
+        <th>Adversary id</th>
+        <th>Adversary name</th>
+        <th>Max level defeated</th>
+        <th>Avg level defeated</th>
+        <th>Total victories</th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+{% for datarow in datarows %}
+<tr>
+    <td>{{ datarow[0] }}</td>
+    <td>{{ datarow[1] }}</td>
+    <td>{{ datarow[2] }}</td>
+    <td>{{ datarow[3] }}</td>
+    <td>{{ datarow[4] }}</td>
+    <td>{{ datarow[5] }}</td>
+    <td>{{ datarow[6] }}</td>
+
+
+
+
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

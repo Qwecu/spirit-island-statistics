@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block title %}Map of the known world{% endblock %}
+{% block content %}
+
+
+<div id="map"></div>
+
+<script>
+
+// initialize the map
+var map = L.map('map');
+map.locate({setView: true, maxZoom: 16});
+
+// load a tile layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 17,
+    minZoom: 1
+  }).addTo(map);
+
+function onLocationFound(e) {
+    var radius = e.accuracy;
+    
+
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point lat " + e.latlng.lat + " lng " + e.latlng.lng).openPopup();
+
+    L.circle(e.latlng, radius).addTo(map);
+    document.getElementById('lat').value = e.latlng.lat;
+    document.getElementById('lng').value = e.latlng.lng;
+
+}
+
+map.on('locationfound', onLocationFound);
+
+function onLocationError(e) {
+    alert(e.message);
+}
+
+map.on('locationerror', onLocationError);
+
+// var circle = L.circle([60.138019899999996, 24.6718836], {
+//           color: "red",
+//           fillColor: "#f03",
+//           fillOpacity: 0.5,
+//           radius: 50.0
+//       }).addTo(map);
+</script>
+
+{% for oldcastle in oldcastles %}
+<script>
+    var circle = L.circle([{{oldcastle[3] }}, {{oldcastle[4] }}], {
+          color: "yellow",
+          fillColor: "#f03",
+          fillOpacity: 0.5,
+          radius: {{oldcastle[5] }}
+      }).addTo(map);
+
+</script>
+{% endfor %}
+
+
+
+<form action="/createcastle" method="POST">
+Create a new and mighty castle named...:
+<input type="text" name="castle">
+<br>
+
+<button class="btn waves-effect waves-light" type="submit" name="action">Create castle
+    <i class="material-icons right">send</i>
+</button>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+<input type="hidden" name="lat" id="lat" value="">
+<input type="hidden" name="lng" id="lng" value="">
+</form>
+
+{% endblock %}
+
+

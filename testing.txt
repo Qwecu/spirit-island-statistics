@@ -1,0 +1,142 @@
+dvv 4-8 viikkoa
+
+konsulaatti varaa aika
+dvv
+passihakemus vireille
+
+
+
+
+select CONCAT(ingredient, ' Hinta: ', price::text, ' (', priceperunit::NUMERIC(6, 2)::text, ' €/', measureunit.name, ')')
+from ingredients
+left join measureunit on measureunit.id = ingredients.measureunit_id
+order by ingredient
+;
+
+SELECT *
+FROM  (
+   SELECT DISTINCT 1 + trunc(random() * 7)::integer AS id
+   FROM   generate_series(1, 5) g
+   ) r
+JOIN   ingredients USING (id)
+LIMIT  10;
+
+select ROW_NUMBER () OVER (ORDER BY id) as id, ingredient from ingredients
+
+where id >2
+----
+SELECT *
+FROM  (
+   SELECT DISTINCT 1 + trunc(random() * 10000)::integer AS id
+   FROM   generate_series(1, 5) g
+   ) r
+--JOIN   ingredients USING (id)
+LIMIT  10;
+
+
+---
+SELECT *
+FROM  (
+   SELECT DISTINCT 1 + trunc(random() * 7)::integer AS id
+   FROM   generate_series(1, 5) g
+   ) r
+JOIN   ingredients USING (id)
+LIMIT  10;
+
+select ROW_NUMBER () OVER (ORDER BY id) as id, ingredient from ingredients
+INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id
+----
+
+SELECT *
+FROM  (
+   SELECT DISTINCT 1 + trunc(random() * 7)::integer AS id
+   FROM   generate_series(1, 5) g
+   ) r
+JOIN   
+(
+select ROW_NUMBER () OVER (ORDER BY id) as id, ingredient from ingredients
+INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id
+) validfoods
+USING (id)
+LIMIT  10;
+--
+SELECT *
+FROM  (
+   SELECT DISTINCT 1 + trunc(random() * 
+		(select COUNT(*) from ingredients
+		INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id)
+)::integer AS id
+   FROM   generate_series(1, 5) g
+   ) r
+JOIN   
+(
+select ROW_NUMBER () OVER (ORDER BY id) as id, ingredient from ingredients
+INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id
+) validfoods
+USING (id)
+LIMIT  10;
+--
+limit pois?
+
+SELECT *
+FROM  (
+   SELECT DISTINCT 1 + trunc(random() * --kuinka monta vaihtoehtoa
+		(select COUNT(*) from ingredients
+		INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id
+		) --rajaukset
+)::integer AS id
+   FROM   generate_series(1, 2) g --kuinka monta valitaan
+   ) r
+JOIN   
+(
+select ROW_NUMBER () OVER (ORDER BY id) as id, ingredient from ingredients
+INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id
+) validfoods
+USING (id);
+
+
+
+
+
+select COUNT(*) from ingredients
+INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id
+
+---
+
+
+    stringsql = \
+        "SELECT * " +\
+        "FROM  ( " +\
+        "SELECT DISTINCT 1 + trunc(random() *  " + \            
+        # kuinka monta vaihtoehtoa
+        "   (select COUNT(*) from ingredients " + \         
+        "	INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id " + \
+        #rajaukset
+        "	) " + \ 
+        " )::integer AS id " + \
+        #kuinka monta valitaan             
+        " FROM   generate_series(1, 2) g " + \ 
+        " ) r " + \
+        " JOIN    " + \
+        "( " + \
+        "select ROW_NUMBER () OVER (ORDER BY id) as id, ingredient from ingredients " + \
+        "INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id " + \
+        ") validfoods " + \
+        "USING (id); "
+
+---
+SELECT *
+FROM  (
+   SELECT DISTINCT 1 + trunc(random() * --kuinka monta vaihtoehtoa
+		(select COUNT(*) from ingredients
+		--INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id
+		) --rajaukset
+)::integer AS id
+   FROM   generate_series(1, 2) g --kuinka monta valitaan
+   ) r
+JOIN   
+(
+select ROW_NUMBER () OVER (ORDER BY id) as id, ingredient from ingredients
+--INNER JOIN filter_ingredient a1 ON a1.ingredient_id = ingredients.id
+) validfoods
+USING (id);

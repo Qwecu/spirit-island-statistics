@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Näytä ostoslista{% endblock %}
+{% block content %}
+
+{% if recipe_name %}
+<h2>{{recipe_name}}</h2>
+<form>
+{%else%}
+<h2>Luo uusi ostoslista</h2>
+<form action="/sendrecipe" method="POST">
+Anna ostoslistalle nimi:
+<input type="text" name="name">
+<button class="btn waves-effect waves-light" type="submit" name="action">Tallenna ostoslista
+    <i class="material-icons right">send</i>
+</button>
+<input id="count" name="count" type="hidden" value={{count}}>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+{%endif%}
+<hr>
+Kokonaishinta: {{totalprice}}
+<hr>
+{% for item in items %}
+<i>Tuote:</i> {{ item[1] }}
+<p>
+<!-- <i>Id:</i> {{ item[2] }}
+<p> -->
+<i>Kappalehinta:</i> {{ item[3] }}
+<p>
+<i>Lukumäärä:</i> {{ item[4] }}
+<hr>
+<input id="hiddenCount{{item[5]}}" name="hiddenCount{{item[5]}}" type="hidden" value={{ item[4] }}>
+<input id="hiddenId{{item[5]}}" name="hiddenId{{item[5]}}" type="hidden" value={{ item[2] }}>
+{% endfor %}
+</form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}Uusi ainesosa{% endblock %}
+{% block content %}
+<form action="/sendingredient" method="POST">
+Uusi aines:
+<input type="text" name="ingredient">
+<br>
+Hinta:
+<input type="text" name="price">
+<br>
+Pakkauskoko:
+<input type="text" name="amount">
+<br>
+Yksikkö:
+{% for unit in units %}
+<p>
+    <label>
+        <input type="radio" name="unitradio" value= {{unit[0]}} {%if unit[0] == 1%}checked{%endif%}> <span>{{unit[1]}}</span>
+    </label>
+</p>
+<br>
+{% endfor %}
+Lisäehdot:
+{% for filter in filters %}
+<p>
+    <label>
+        <input type="checkbox" name="filtercheck" value ={{filter[0]}}> <span>{{filter[1]}}</span>
+    </label>
+</p>
+<br>
+{% endfor %}
+<br>
+<button class="btn waves-effect waves-light" type="submit" name="action">Lähetä
+    <i class="material-icons right">send</i>
+</button>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+
+{% endblock %}
+
+

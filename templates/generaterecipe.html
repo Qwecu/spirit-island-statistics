@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Luo uusi resepti{% endblock %}
+{% block content %}
+<form action="/generaterecipepost" method="POST">
+<p>Budjetti:<br>
+<input type="text" name="budget"></p>
+
+Lisäehdot:
+{% for filter in filters %}
+<p>
+    <label>
+        <input type="checkbox" name="filtercheck" value ={{filter[0]}}> <span>{{filter[1]}}</span>
+    </label>
+</p>
+<br>
+{% endfor %}
+<button class="btn waves-effect waves-light" type="submit" name="action">Luo uusi resepti
+    <i class="material-icons right">send</i>
+</button>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+{% endblock %}

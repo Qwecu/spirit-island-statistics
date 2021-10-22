@@ -1,0 +1,31 @@
+/home/lasse/.bashrc not updated, /home/lasse/pgsql is already mentioned there, so assuming this is reinstall and it is up to date.
+
+mkdir: cannot create directory ‘/home/lasse/pgsql/sock’: File exists
+Creating database, please wait.
+initdb: error: directory "/home/lasse/pgsql/data" exists but is not empty
+If you want to create a new database system, either remove or empty
+the directory "/home/lasse/pgsql/data" or run initdb
+with an argument other than "/home/lasse/pgsql/data".
+createdb: error: database creation failed: ERROR:  database "lasse" already exists
+
+******
+You may need to start new terminal (or relogin) for environment variables
+to update.
+
+Use command start-pg.sh to start database, ctrl-c to stop it.
+
+If you are running this with computer which is in private use (ie. not a lab
+computer), you could also start and stop database in the background using
+pg_ctl utility, refer to documentation for details.
+
+When it is running, you can connect to database in different terminal with
+command:
+    psql
+
+When you need to connect to database from code, use socket in
+/home/lasse/pgsql/sock
+with default database name and no need to give username or password. Please
+do not hardcode this into your code, this connection will only work for you.
+
+
+select 'drop table "' || tablename || '" cascade;' from pg_tables;
