@@ -19,11 +19,19 @@ def login(username, password):
         hash_value = user[0]
         if check_password_hash(hash_value, password):
             session["username"] = username
-            session["user_id"] = user[1]
+            session["user_id"] = user[1]            
             session["csrf_token"] = os.urandom(16).hex()
+            if playerid() > 0 :
+                session["playername"] = playername(playerid)
         else:
             error = "Password is incorrect"
     return error
+
+def playername(playerid):
+    sql = "SELECT name FROM player WHERE id=:id"
+    result = db.session.execute(sql, {"id":playerid()})
+    res = result.fetchone()[0]
+    return res
 
 def register(username, password):
     hash_value = generate_password_hash(password)
@@ -53,3 +61,11 @@ def csrf():
 
 def userid():
     return int(session["user_id"])
+
+def playerid():
+    sql = "SELECT playerid FROM users WHERE username=:username"
+    result = db.session.execute(sql, {"username":session["username"]})
+    res = result.fetchone()[0]
+    if res == None:
+        res = -1
+    return res

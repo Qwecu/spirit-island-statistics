@@ -2,6 +2,8 @@
 {% block title %}Uusi ainesosa{% endblock %}
 {% block content %}
 
+{if %data%}
+
 <table>
     <tr>
         <th>Spirit id</th>
@@ -11,9 +13,6 @@
         <th>Max level defeated</th>
         <th>Avg level defeated</th>
         <th>Total victories</th>
-        <th></th>
-        <th></th>
-        <th></th>
     </tr>
 {% for datarow in datarows %}
 <tr>
@@ -31,5 +30,5 @@
 </tr>
 {% endfor %}
 </table>
-
+{}
 {% endblock %}

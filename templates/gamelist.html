@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}Game list{% endblock %}
+{% block content %}
+
+{%if not session.playername %}
+
+<p>Your username is not connected to a player. Ask Elsa to do it.</p>
+
+{%endif%}
+
+{%if session.playername %}
+
+<p>{{session.playername}}</p>
+
+{%endif%}
+
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Players</th>
+        <th>Spirits</th>
+        <th>Game id</th>
+        <th>Adversaries</th>
+        <th>Score</th>
+        <th>Win</th>
+        <th>Lose</th>
+        <th>Comment</th>
+        <th>Player count</th>
+    </tr>
+{% for datarow in datarows %}
+<tr>
+    <td>{{ datarow[0] }}</td>
+    <td>{{ datarow[1] }}</td>
+    <td>{{ datarow[2] }}</td>
+    <td>{{ datarow[3] }}</td>
+    <!-- <td>{{ datarow[4] }}</td> -->
+    <td>{{ datarow[5] }}</td>
+    <td>{{ datarow[6] }}</td>
+    <td>{{ datarow[7] }}</td>
+    <td>{{ datarow[8] }}</td>
+    <td>{{ datarow[9] }}</td>
+    <td>{{ datarow[10] }}</td>
+
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

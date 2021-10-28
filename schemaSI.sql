@@ -5,6 +5,13 @@ password_hash TEXT,
 permanentAccount BIT
 );
 
+CREATE TABLE users (
+id SERIAL PRIMARY KEY,
+username TEXT NOT NULL UNIQUE CHECK (username <> ''),
+password_hash TEXT,
+playerId INT REFERENCES player(id)
+);
+
 CREATE TABLE complexity (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL CHECK (name <> '')
