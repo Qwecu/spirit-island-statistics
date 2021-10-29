@@ -7,6 +7,11 @@ def logout():
     del session["username"]
     del session["user_id"]
     del session["csrf_token"]
+    if session.get("playername") :
+        del session["playername"]
+    if session.get("player_id") :
+        del session["player_id"]
+
 
 def login(username, password):
     error = ""
@@ -22,6 +27,7 @@ def login(username, password):
             session["user_id"] = user[1]            
             session["csrf_token"] = os.urandom(16).hex()
             if playerid() > 0 :
+                session["player_id"] = playerid()
                 session["playername"] = playername(playerid)
         else:
             error = "Password is incorrect"

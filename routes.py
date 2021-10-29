@@ -40,92 +40,57 @@ def mygamelist():
          GROUP  BY game.id,
                    comment)
 SELECT g.time,
-       playernames,
-       spiritnames,
-       psgameid,
-       Count(*)                 adversaryCount,
-       String_agg(a.NAME, ', ') adversaries,
-       g.scorecustom            score,
-       g.win,
-       g.lose,
-       com,
-       playercount
+playernames,
+spiritnames,
+psgameid,
+Count(*) adversaryCount,
+STRING_AGG((a.name || ' lvl ' || CAST(al.level AS TEXT)), ', ') adversaries,
+g.scorecustom score, g.win, g.lose, com, playercount
 FROM   playersspirits
-       LEFT JOIN game g
-              ON g.id = psgameid
-       LEFT JOIN game_adversarylevel gal
-              ON gal.gameid = psgameid
-       LEFT JOIN adversarylevel al
-              ON al.id = gal.adversarylevelid
-       LEFT JOIN adversary a
-              ON a.id = al.adversaryid
+LEFT JOIN game g ON g.id = psgameid
+LEFT JOIN game_adversarylevel gal ON gal.gameid = psgameid
+LEFT JOIN adversarylevel al ON al.id = gal.adversarylevelid
+LEFT JOIN adversary a ON a.id = al.adversaryid
 GROUP  BY g.time,
-          playernames,
-          spiritnames,
-          psgameid,
-          g.scorecustom,
-          g.win,
-          g.lose,
-          com,
-          playercount
-ORDER  BY time desc,
-          psgameid  """
+playernames, spiritnames, psgameid, g.scorecustom, g.win, g.lose, com, playercount
+ORDER  BY time desc, psgameid  """
     data = db.session.execute(sql)
     return render_template("gamelist.html", datarows = data)
 
 @app.route("/gamelist")
 def gamelist():
     sql = """
-     WITH playersspirits
-     AS (SELECT String_agg(p.NAME, ', ') playernames,
-                String_agg(s.NAME, ', ') spiritnames,
-                game.id                  psgameid,
-                comment                  com,
-                Count(*)                 playercount
-         FROM   game
-                LEFT JOIN game_player_spirit gps
-                       ON gps.gameid = game.id
-                LEFT JOIN player p
-                       ON p.id = gps.playerid
-                LEFT JOIN spirit s
-                       ON s.id = gps.spiritid
-         WHERE  EXISTS(SELECT NULL
-                       FROM   game_player_spirit sub
-                       WHERE  1 = 1
-                              AND sub.gameid = game.id)
-         GROUP  BY game.id,
-                   comment)
+WITH playersspirits
+AS (SELECT String_agg(p.NAME, ', ') playernames,
+String_agg(s.NAME, ', ') spiritnames,
+game.id psgameid,
+comment com,
+Count(*) playercount
+FROM   game
+LEFT JOIN game_player_spirit gps ON gps.gameid = game.id
+LEFT JOIN player p ON p.id = gps.playerid
+LEFT JOIN spirit s ON s.id = gps.spiritid
+WHERE  EXISTS(SELECT NULL
+	FROM   game_player_spirit sub
+	WHERE  1 = 1
+	AND sub.gameid = game.id)
+	GROUP  BY game.id,
+	comment)
 SELECT g.time,
-       playernames,
-       spiritnames,
-       psgameid,
-       Count(*)                 adversaryCount,
-       String_agg(a.NAME, ', ') adversaries,
-       g.scorecustom            score,
-       g.win,
-       g.lose,
-       com,
-       playercount
+playernames,
+spiritnames,
+psgameid,
+Count(*) adversaryCount,
+STRING_AGG((a.name || ' lvl ' || CAST(al.level AS TEXT)), ', ') adversaries,
+g.scorecustom score, g.win, g.lose, com, playercount
 FROM   playersspirits
-       LEFT JOIN game g
-              ON g.id = psgameid
-       LEFT JOIN game_adversarylevel gal
-              ON gal.gameid = psgameid
-       LEFT JOIN adversarylevel al
-              ON al.id = gal.adversarylevelid
-       LEFT JOIN adversary a
-              ON a.id = al.adversaryid
+LEFT JOIN game g ON g.id = psgameid
+LEFT JOIN game_adversarylevel gal ON gal.gameid = psgameid
+LEFT JOIN adversarylevel al ON al.id = gal.adversarylevelid
+LEFT JOIN adversary a ON a.id = al.adversaryid
 GROUP  BY g.time,
-          playernames,
-          spiritnames,
-          psgameid,
-          g.scorecustom,
-          g.win,
-          g.lose,
-          com,
-          playercount
-ORDER  BY time desc,
-          psgameid  """
+playernames, spiritnames, psgameid, g.scorecustom, g.win, g.lose, com, playercount
+ORDER  BY time desc, psgameid  """
     data = db.session.execute(sql)
     return render_template("gamelist.html", datarows = data)
 
